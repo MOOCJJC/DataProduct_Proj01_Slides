@@ -1,0 +1,103 @@
+---
+title       : An Online App Tell You What Affects MPG
+subtitle    : A project assignment in Data Product Cousera
+author      : MOOCJJC
+job         : A life-time learner
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+logo        : a_logo.png
+
+---
+<style>
+.title-slide {
+  background-color: #66AAFF; /* #EDE0CF; ; #CA9F9D*/
+}
+
+</style>
+
+## Overview
+
+The application on www.shinyapps.io will automatically generate scatter plots to show the
+dependency of MPG on the selected attributes in the `mtcars` dataset of the `datasets`
+library in R.
+
+1. Interface Functions
+2. Working with `ggplot2` in Shiny Apps
+3. A plot example
+
+--- .class #id 
+
+## Functions
+
+<img src="./assets/img/functions.png" width ="980">
+
+--- .class #id 
+
+## Using `ggplot2` in a Shiny App
+The app used `ggplot2` library in this shiny app. But the problem is that we cannot put a string variable that contains target attribute name in `aes` function of `ggplot`. We must generate a temporary data frame with fixed attribute name and use this temporary data frame to draw the ggplot.
+
+The following shows the example codes that generate the temporary data frame:
+```{r,eval=FALSE}
+tempData <- cbind(mtcars[,input$att], mtcars[,"mpg"])
+colnames(tempData) <- c("Attribute", "mpg")
+tempData <- data.frame(tempData)
+```
+where the `input$att` is the string variable read from the front panel of the app. But we cannot put it directly in the `aes` function. The following shows the codes that call the ggplot function:
+```{r,eval=FALSE}
+p <- ggplot(tempData, aes(Attribute, mpg))
+```
+
+--- .class #id 
+
+## An example plot
+The following shows the plot generate by the code in `server.R`.
+
+
+```{r,echo=FALSE}
+library(datasets)
+library(ggplot2)
+
+# attList is used to convert the abbreviations of attributes to their full names
+
+attList <- c("cyl" = "Cylinders",
+             "disp" = "Displacement",
+             "hp" = "Horse Power",
+             "drat" = "Rear Axle Ratio",
+             "wt" = "Weight",
+             "qsec" = "1/4 Mile Time",
+             "gear" = "Number of Forward Gears",
+             "carb" = "Number of carburetors")
+
+# Get the input parameters
+pColor <- 2
+pSize <- 5
+pAlpha <- 0.5
+
+lColor <- 3
+lWidth <- 1
+
+# Prepare the data for plotting
+tempData <- cbind(mtcars[,"disp"], mtcars[,"mpg"])
+colnames(tempData) <- c("Attribute", "mpg")
+tempData <- data.frame(tempData)
+
+xLabelPos <- (min(tempData$Attribute) + max(tempData$Attribute))/2
+yLabelPos <- max(tempData$mpg)
+
+# Linear fit model
+linearFit <- lm(mpg ~ Attribute, data = tempData)
+lModel <- paste("Intercept: ", toString(linearFit[[1]][1]), "  ",
+                "Slope: ", toString(linearFit[[1]][2]))
+
+# Plot with ggplot2 library
+p <- ggplot(tempData, aes(Attribute, mpg))
+p <- p + geom_point(size = pSize, colour = pColor, alpha = pAlpha) + geom_smooth(
+        method = "lm", se=FALSE, color=lColor, size = lWidth) 
+p <- p + xlab(attList["disp"]) + ylab("Miles per Gallon")
+p + annotate("text", x = xLabelPos, y = yLabelPos, label = lModel)
+```
+

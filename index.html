@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>An Online App Tell You What Affects MPG</title>
+  <meta charset="utf-8">
+  <meta name="description" content="An Online App Tell You What Affects MPG">
+  <meta name="author" content="MOOCJJC">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <aside class="gdbar">
+    <img src="assets/img/a_logo.png">
+  </aside>
+  <hgroup class="auto-fadein">
+    <h1>An Online App Tell You What Affects MPG</h1>
+    <h2>A project assignment in Data Product Cousera</h2>
+    <p>MOOCJJC<br/>A life-time learner</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style>
+.title-slide {
+  background-color: #66AAFF; /* #EDE0CF; ; #CA9F9D*/
+}
+
+</style>
+
+<h2>Overview</h2>
+
+<p>The application on <a href="http://www.shinyapps.io">www.shinyapps.io</a> will automatically generate scatter plots to show the
+dependency of MPG on the selected attributes in the <code>mtcars</code> dataset of the <code>datasets</code>
+library in R.</p>
+
+<ol>
+<li>Interface Functions</li>
+<li>Working with <code>ggplot2</code> in Shiny Apps</li>
+<li>A plot example</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Functions</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="./assets/img/functions.png" width ="980"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Using <code>ggplot2</code> in a Shiny App</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The app used <code>ggplot2</code> library in this shiny app. But the problem is that we cannot put a string variable that contains target attribute name in <code>aes</code> function of <code>ggplot</code>. We must generate a temporary data frame with fixed attribute name and use this temporary data frame to draw the ggplot.</p>
+
+<p>The following shows the example codes that generate the temporary data frame:</p>
+
+<pre><code class="r">tempData &lt;- cbind(mtcars[,input$att], mtcars[,&quot;mpg&quot;])
+colnames(tempData) &lt;- c(&quot;Attribute&quot;, &quot;mpg&quot;)
+tempData &lt;- data.frame(tempData)
+</code></pre>
+
+<p>where the <code>input$att</code> is the string variable read from the front panel of the app. But we cannot put it directly in the <code>aes</code> function. The following shows the codes that call the ggplot function:</p>
+
+<pre><code class="r">p &lt;- ggplot(tempData, aes(Attribute, mpg))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>An example plot</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The following shows the plot generate by the code in <code>server.R</code>.</p>
+
+<p><img src="assets/fig/unnamed-chunk-3.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title=''>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Functions'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Using <code>ggplot2</code> in a Shiny App'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='An example plot'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
